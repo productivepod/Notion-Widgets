@@ -1,0 +1,14 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link href = 'https://fonts.googleapis.com/css?family=Inter&display=swap' rel = 'stylesheet' type = 'text/css'>
+    
+
+</head>
+
+<body onload="startbars()">
+    <h1>Mutual Funds</h1>
+</body>
+
+</html>
