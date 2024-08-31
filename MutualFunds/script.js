@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const slider = document.getElementById('slider');
 
             data.forEach(value => {
-                const apiUrl = `https://thirdparty.com/api?param=${value}`;
+                const apiUrl = `https://api.mfapi.in/mf/${value}/latest`;
 
                 fetch(apiUrl)
                     .then(apiResponse => apiResponse.json())
