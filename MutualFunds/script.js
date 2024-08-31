@@ -1,65 +1,48 @@
 // script.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Path to your mf.json file
     const jsonPath = 'mf.json';
 
-    // Fetch the JSON data
     fetch(jsonPath)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
-            // Ensure data is an array
-            if (!Array.isArray(data)) {
-                throw new Error('mf.json does not contain an array');
-            }
+            if (!Array.isArray(data)) throw new Error('Invalid JSON format');
 
-            // Loop through each value and make API calls
+            const slider = document.getElementById('slider');
+
             data.forEach(value => {
-                // Replace with your actual third-party API URL and parameters
-                const apiUrl = `https://api.mfapi.in/mf/${value}/latest`;
+                const apiUrl = `https://thirdparty.com/api?param=${value}`;
 
                 fetch(apiUrl)
-                    .then(apiResponse => {
-                        if (!apiResponse.ok) {
-                            throw new Error(`API error for ${value}: ${apiResponse.status}`);
-                        }
-                        return apiResponse.json();
-                    })
+                    .then(apiResponse => apiResponse.json())
                     .then(apiData => {
-                        // Handle the API response data
-                        console.log(`Data for ${value}:`, apiData);
-                        // You can update the DOM or perform other actions here
-                        displayData(value, apiData);
+                        if (apiData.status === 'SUCCESS') {
+                            const slide = document.createElement('div');
+                            slide.classList.add('slide');
+
+                            slide.innerHTML = `
+                  <h2>${apiData.meta.scheme_name}</h2>
+                  <p><strong>Fund House:</strong> ${apiData.meta.fund_house}</p>
+                  <p><strong>Scheme Type:</strong> ${apiData.meta.scheme_type}</p>
+                  <p><strong>Category:</strong> ${apiData.meta.scheme_category}</p>
+                  <p><strong>Date:</strong> ${apiData.data[0].date}</p>
+                  <p><strong>NAV:</strong> ${apiData.data[0].nav}</p>
+                `;
+
+                            slider.appendChild(slide);
+                        }
                     })
-                    .catch(apiError => {
-                        console.error(apiError);
-                    });
+                    .catch(error => console.error(`Error fetching data for ${value}:`, error));
             });
         })
-        .catch(error => {
-            console.error('Error fetching mf.json:', error);
-        });
+        .catch(error => console.error('Error fetching JSON file:', error));
+
+    // Slider functionality
+    let currentIndex = 0;
+    setInterval(() => {
+        const slider = document.getElementById('slider');
+        const slides = document.querySelectorAll('.slide');
+        currentIndex = (currentIndex + 1) % slides.length;
+        slider.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }, 3000); // Adjust the interval as needed
 });
-
-// Optional: Function to display data on the webpage
-function displayData(value, data) {
-    const container = document.getElementById('data-container');
-
-    const item = document.createElement('div');
-    item.classList.add('data-item');
-
-    const title = document.createElement('h3');
-    title.textContent = `Data for ${value}`;
-
-    const content = document.createElement('pre');
-    content.textContent = JSON.stringify(data, null, 2);
-
-    item.appendChild(title);
-    item.appendChild(content);
-    container.appendChild(item);
-}
