@@ -1,0 +1,24 @@
+/* styles.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  .data-item {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .data-item h3 {
+    margin-top: 0;
+  }
+  
+  pre {
+    background-color: #f9f9f9;
+    padding: 10px;
+    overflow-x: auto;
+  }
+  
